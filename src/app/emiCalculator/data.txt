@@ -1,0 +1,321 @@
+"use client";
+import React, { useState, useMemo } from "react";
+
+export default function EMICalculatorPage() {
+  const [principal, setPrincipal] = useState(10000);
+  const [annualRate, setAnnualRate] = useState(15.5);
+  const [tenure, setTenure] = useState(1);
+  const [tenureUnit, setTenureUnit] = useState("years"); // "years" or "months"
+  const [showSchedule, setShowSchedule] = useState(false);
+  const [emiType, setEmiType] = useState("fixed"); // "fixed" or "flexible"
+
+  const months =
+    tenureUnit === "years"
+      ? Math.round((tenure || 0) * 12)
+      : Math.round(tenure || 0);
+  const monthlyRate = (annualRate || 0) / 12 / 100;
+
+  function handleUnitChange(newUnit) {
+    if (newUnit === tenureUnit) return;
+    if (newUnit === "years") {
+      // convert months -> years (keep two decimals)
+      setTenure((prev) => Math.round(((prev || 0) / 12) * 100) / 100);
+    } else {
+      // convert years -> months
+      setTenure((prev) => Math.round((prev || 0) * 12));
+    }
+    setTenureUnit(newUnit);
+  }
+
+  const { emi, totalPayment, totalInterest, schedule } = useMemo(() => {
+    const P = Number(principal) || 0;
+    const r = Number(monthlyRate) || 0;
+    const n = Number(months) || 0;
+
+    const scheduleArr = [];
+    let totalInt = 0;
+
+    if (n === 0 || P === 0) {
+      return { emi: 0, totalPayment: 0, totalInterest: 0, schedule: [] };
+    }
+
+    if (emiType === "fixed") {
+      // Equal EMI each month
+      let emiVal = 0;
+      if (r === 0) emiVal = P / n;
+      else {
+        const factor = Math.pow(1 + r, n);
+        emiVal = (P * r * factor) / (factor - 1);
+      }
+
+      let remaining = P;
+      for (let i = 1; i <= n; i++) {
+        const interest = remaining * r;
+        let principalComponent = emiVal - interest;
+        if (i === n) {
+          // ensure last payment clears the loan (handle rounding)
+          principalComponent = remaining;
+        }
+        remaining = Math.max(0, remaining - principalComponent);
+        totalInt += interest;
+        scheduleArr.push({
+          month: i,
+          emi: emiVal,
+          principalPaid: principalComponent,
+          interestPaid: interest,
+          balance: remaining,
+        });
+      }
+
+      const totalPay = emiVal * n;
+      return {
+        emi: emiVal,
+        totalPayment: totalPay,
+        totalInterest: totalInt,
+        schedule: scheduleArr,
+      };
+    } else {
+      // Flexible EMI: fixed principal component each month => EMI decreases over time
+      const principalComponentConst = P / n;
+      let remaining = P;
+      for (let i = 1; i <= n; i++) {
+        let interest = remaining * r;
+        let principalComponent = principalComponentConst;
+        if (i === n) {
+          // final adjustment to clear rounding residue
+          principalComponent = remaining;
+        }
+        const emiVal = principalComponent + interest;
+        remaining = Math.max(0, remaining - principalComponent);
+        totalInt += interest;
+        scheduleArr.push({
+          month: i,
+          emi: emiVal,
+          principalPaid: principalComponent,
+          interestPaid: interest,
+          balance: remaining,
+        });
+      }
+
+      const totalPay = scheduleArr.reduce((s, it) => s + it.emi, 0);
+      return {
+        emi: scheduleArr[0]?.emi || 0, // first month EMI (starting EMI)
+        totalPayment: totalPay,
+        totalInterest: totalInt,
+        schedule: scheduleArr,
+      };
+    }
+  }, [principal, monthlyRate, months, emiType]);
+
+  function reset() {
+    setPrincipal(500000);
+    setAnnualRate(7.5);
+    setTenure(5);
+    setTenureUnit("years");
+    setShowSchedule(false);
+    setEmiType("fixed");
+  }
+
+  function exportCSV() {
+    if (!schedule.length) return;
+    const header = [
+      "Month",
+      "EMI",
+      "Principal Paid",
+      "Interest Paid",
+      "Balance",
+    ];
+    const rows = schedule.map((s) =>
+      [s.month, s.emi, s.principalPaid, s.interestPaid, s.balance].map((v) =>
+        Number(v).toFixed(2)
+      )
+    );
+    const csv = [header, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "emi_schedule.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const format = (v) =>
+    typeof v === "number"
+      ? v.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : v;
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 font-sans text-gray-900">
+      <h1 className="text-2xl font-semibold mb-4">EMI Calculator</h1>
+
+      <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <label className="flex flex-col text-sm">
+            Loan Amount
+            <input
+              className="mt-2 p-2 border rounded-md"
+              type="number"
+              min="0"
+              step="100"
+              value={principal}
+              onChange={(e) => setPrincipal(Number(e.target.value))}
+            />
+          </label>
+
+          <label className="flex flex-col text-sm">
+            Annual Interest Rate (%)
+            <input
+              className="mt-2 p-2 border rounded-md"
+              type="number"
+              min="0"
+              step="0.01"
+              value={annualRate}
+              onChange={(e) => setAnnualRate(Number(e.target.value))}
+            />
+          </label>
+
+          <label className="flex flex-col text-sm">
+            Tenure ({tenureUnit})
+            <input
+              className="mt-2 p-2 border rounded-md"
+              type="number"
+              min="0"
+              step={tenureUnit === "years" ? "0.25" : "1"}
+              value={tenure}
+              onChange={(e) => setTenure(Number(e.target.value))}
+            />
+          </label>
+        </div>
+
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-4">
+          <div className="flex items-center gap-4">
+            <div className="text-sm">Tenure Unit:</div>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="unit"
+                checked={tenureUnit === "years"}
+                onChange={() => handleUnitChange("years")}
+                className="accent-slate-700"
+              />
+              Years
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="unit"
+                checked={tenureUnit === "months"}
+                onChange={() => handleUnitChange("months")}
+                className="accent-slate-700"
+              />
+              Months
+            </label>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-sm">EMI Type:</div>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="emiType"
+                checked={emiType === "fixed"}
+                onChange={() => setEmiType("fixed")}
+                className="accent-slate-700"
+              />
+              Fixed
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="emiType"
+                checked={emiType === "flexible"}
+                onChange={() => setEmiType("flexible")}
+                className="accent-slate-700"
+              />
+              Flexible (constant principal)
+            </label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div className="bg-gray-50 p-4 rounded">
+            <div className="text-sm text-gray-600">
+              Monthly EMI {emiType === "flexible" ? "(first month)" : ""}
+            </div>
+            <div className="text-xl font-semibold mt-1">₹ {format(emi)}</div>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded">
+            <div className="text-sm text-gray-600">Total Interest</div>
+            <div className="text-xl font-semibold mt-1">
+              ₹ {format(totalInterest)}
+            </div>
+          </div>
+
+          <div className="bg-gray-50 p-4 rounded">
+            <div className="text-sm text-gray-600">Total Payment</div>
+            <div className="text-xl font-semibold mt-1">
+              ₹ {format(totalPayment)}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-3 mt-4">
+          <button
+            onClick={() => setShowSchedule((s) => !s)}
+            className="px-4 py-2 rounded bg-slate-900 text-white"
+          >
+            {showSchedule ? "Hide Schedule" : "Show Schedule"}
+          </button>
+          <button
+            onClick={exportCSV}
+            className="px-4 py-2 rounded bg-slate-600 text-white disabled:opacity-50"
+            disabled={!schedule.length}
+          >
+            Export CSV
+          </button>
+          <button
+            onClick={reset}
+            className="px-4 py-2 rounded bg-gray-200 text-black"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      {showSchedule && schedule.length > 0 && (
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-medium mb-4">Amortization Schedule</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead>
+                <tr className="text-left border-b">
+                  <th className="py-2 px-3">Month</th>
+                  <th className="py-2 px-3">EMI</th>
+                  <th className="py-2 px-3">Principal</th>
+                  <th className="py-2 px-3">Interest</th>
+                  <th className="py-2 px-3">Balance</th>
+                </tr>
+              </thead>
+              <tbody>
+                {schedule.map((s) => (
+                  <tr key={s.month} className="border-b last:border-b-0">
+                    <td className="py-2 px-3">{s.month}</td>
+                    <td className="py-2 px-3">₹ {format(s.emi)}</td>
+                    <td className="py-2 px-3">₹ {format(s.principalPaid)}</td>
+                    <td className="py-2 px-3">₹ {format(s.interestPaid)}</td>
+                    <td className="py-2 px-3">₹ {format(s.balance)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
