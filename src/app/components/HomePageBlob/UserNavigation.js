@@ -1,13 +1,20 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
 const UserNavigation = () => {
   return (
     <>
-      <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between bg-white">
+      <header className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between bg-white border-b-1">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-md bg-gradient-to-br from-indigo-600 to-cyan-400 flex items-center justify-center text-white font-bold">
-            SF
+          <div className="w-10 h-10 rounded-md flex items-center justify-center text-white font-bold">
+            <Image
+              src="/image/logo.png"
+              alt="logo"
+              className="w-10 h-auto"
+              height={300}
+              width={300}
+            />
           </div>
           <div className="text-lg font-semibold text-black">Skylinee</div>
         </div>
@@ -24,9 +31,9 @@ const UserNavigation = () => {
           <Link href="/resources" className="hover:text-slate-900 transition">
             Resources
           </Link>
-          <Link href="/pricing" className="hover:text-slate-900 transition">
+          {/* <Link href="/pricing" className="hover:text-slate-900 transition">
             Pricing
-          </Link>
+          </Link> */}
           <Link
             href="/emiCalculator"
             className="hover:text-slate-900 transition"

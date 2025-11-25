@@ -35,7 +35,7 @@ const Features = () => {
           ].map((f, i) => (
             <div
               key={i}
-              className="p-5 bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-lg transition transform hover:-translate-y-1"
+              className="p-5 bg-white border border-slate-100 rounded-xl shadow-2xl hover:shadow-lg shadow-yellow-600 cursor-pointer transition transform hover:-translate-y-1"
             >
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center">

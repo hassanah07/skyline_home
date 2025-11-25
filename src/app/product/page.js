@@ -6,7 +6,7 @@ import Cta from "../components/HomePageBlob/Cta";
 const PRODUCTS = [
   {
     id: "gold-loan",
-    name: "Gold Loan",
+    name: "Gold Loan(Comming Soon)",
     short: "Quick collateral-based loans against gold.",
     details:
       "Get instant loans against your gold jewellery with minimal documentation and competitive rates. Flexible tenure and swift disbursal.",
@@ -93,8 +93,8 @@ const PRODUCTS = [
     ),
   },
   {
-    id: "tractor-loan",
-    name: "Tractor Loan",
+    id: "Argi-loan",
+    name: "Argiculture Loan",
     short: "Unsecured loans for personal needs.",
     details:
       "Flexible personal loans for emergencies, travel, education, or home improvements. Minimal documentation and fast processing.",
@@ -202,7 +202,7 @@ export default function Page() {
         {PRODUCTS.map((p, i) => (
           <article
             key={p.id}
-            className="relative group bg-white border rounded-xl p-6 shadow-sm hover:shadow-lg transition-shadow cursor-pointer"
+            className="relative group bg-white border rounded-xl p-6 shadow-2xl hover:shadow-lg shadow-yellow-600 transition-shadow cursor-pointer"
             onClick={() => setOpenProduct(p)}
             role="button"
             tabIndex={0}

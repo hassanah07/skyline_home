@@ -2,10 +2,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import Cta from "../components/HomePageBlob/Cta";
 import Footer from "../components/HomePageBlob/Footer";
+import ImageCarousel from "../components/ImageCarousel";
 
 export default function Page() {
   const cardsRef = useRef([]);
   const [toast, setToast] = useState(null);
+  const localFallbackPath =
+    "/mnt/data/A_photograph_features_a_professional_interaction_b.png";
+
+  const mapSrc = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3575.8798785578147!2d90.8600117754195!3d26.330388876999077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3759a17b0a8bfcdf%3A0x47e61481c5707ec2!2sBamuntari%20Bazar!5e0!3m2!1sen!2sin!4v1764093268070!5m2!1sen!2sin`;
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -132,6 +137,13 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-white to-slate-50 text-slate-800">
+      <ImageCarousel
+        images={[
+          "/image/financial/image6.png",
+          "/image/financial/image4.png",
+          "/image/financial/image5.png",
+        ]}
+      />
       <div className="max-w-6xl mx-auto px-6 py-16">
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
@@ -151,11 +163,11 @@ export default function Page() {
               <article
                 key={s.id}
                 ref={(el) => (cardsRef.current[idx] = el)}
-                className="card group relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transform transition hover:scale-[1.02] hover:shadow-lg"
+                className="card group relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl shadow-yellow-500 transform transition hover:scale-[1.02] hover:shadow-lg"
                 style={{ willChange: "transform, opacity" }}
               >
                 <div
-                  className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${s.color} shadow-sm`}
+                  className={`inline-flex items-center justify-center w-12 h-12 rounded-lg ${s.color} shadow-2xl`}
                 >
                   {s.icon}
                 </div>
@@ -189,16 +201,15 @@ export default function Page() {
               <div className="text-sm text-slate-700">
                 <strong>Office</strong>
                 <p className="mt-2 text-slate-600">
-                  Skyline E-Finance Solution PVT LTD, Bazar Tiniali, Bamuntari
+                  Skylinee Fynum Small Finance PVT LTD, Bazar Tiniali, Bamuntari
                   Bazar, Kalgachia, Barperta, Assam, 781319
                 </p>
                 <p className="mt-3">
-                  <span className="font-semibold">Phone:</span> (+91) 9957
-                  123456
+                  <span className="font-semibold">Phone:</span> (+91) 9365430147
                 </p>
                 <p className="mt-1">
-                  <span className="font-semibold">Email:</span>{" "}
-                  help@skylineefinance.com
+                  <span className="font-semibold">Email:</span>
+                  noreply.skylinee@gmail.com
                 </p>
               </div>
             </div>
@@ -213,7 +224,7 @@ export default function Page() {
 
           <form
             onSubmit={handleSubmit}
-            className="relative bg-white rounded-2xl p-6 border border-slate-100 shadow-sm"
+            className="relative bg-gray-50 rounded-2xl p-6 border border-slate-100 shadow-2xl"
           >
             <div className="grid gap-4">
               <div className="relative">
@@ -273,8 +284,15 @@ export default function Page() {
 
             {/* small animated map placeholder */}
             <div className="mt-6 h-36 rounded-lg overflow-hidden border border-slate-100">
-              <div className="w-full h-full bg-[linear-gradient(135deg,#eef2ff,white)] flex items-center justify-center text-slate-400 text-sm">
-                Map preview
+              <div className="w-full bg-[linear-gradient(135deg,#eef2ff,white)] flex items-center justify-center text-slate-400 text-sm">
+                <iframe
+                  title="Bamuntari Bazar - Map"
+                  src={mapSrc}
+                  className="absolute bottom-0 left-0 w-full border-0 rounded-lg"
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
               </div>
             </div>
           </form>

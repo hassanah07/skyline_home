@@ -4,7 +4,7 @@ const Cta = () => {
   return (
     <>
       <section className="max-w-7xl mx-auto px-6 py-12">
-        <div className="rounded-2xl bg-indigo-600 text-white p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="rounded-2xl bg-indigo-600 text-white p-8 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
           <div>
             <h4 className="text-2xl font-semibold">
               Ready to scale with smarter financing?

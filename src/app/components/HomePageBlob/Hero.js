@@ -18,7 +18,7 @@ const Hero = () => {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <a
               href="#"
-              className="inline-flex items-center gap-3 px-5 py-3 rounded-md bg-indigo-600 text-white font-medium shadow hover:bg-indigo-700 transition"
+              className="inline-flex items-center gap-3 px-5 py-3 rounded-md bg-indigo-600 text-white font-medium shadow-xl hover:bg-indigo-700 transition"
             >
               Start an application
               <svg
@@ -37,22 +37,22 @@ const Hero = () => {
             </a>
             <Link
               href="/emiCalculator"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-md border bg-pink-200 hover:bg-red-500 border-slate-200 text-slate-700 hover:shadow transition"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-md border bg-pink-200 hover:bg-red-500 border-slate-200 text-slate-700 shadow-2xl transition"
             >
               Calculate your EMI
             </Link>
           </div>
 
           <div className="mt-8 grid grid-cols-3 gap-4 max-w-md">
-            <div className="p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+            <div className="p-4 bg-white rounded-lg border border-slate-100 shadow-2xl shadow-blue-600">
               <div className="text-sm text-slate-500">Approval time</div>
               <div className="mt-1 font-semibold text-lg">Under 24 hours</div>
             </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm border border-slate-100 animate-pulse">
+            <div className="p-4 bg-white rounded-lg border border-slate-100 animate-pulse shadow-2xl shadow-yellow-600">
               <div className="text-sm text-slate-500">Avg APR</div>
               <div className="mt-1 font-semibold text-lg">6.4%</div>
             </div>
-            <div className="p-4 bg-white rounded-lg shadow-sm border border-slate-100">
+            <div className="p-4 bg-white rounded-lg border border-slate-100 shadow-2xl shadow-red-600">
               <div className="text-sm text-slate-500">Customers</div>
               <div className="mt-1 font-semibold text-lg">120k+</div>
             </div>
@@ -61,7 +61,7 @@ const Hero = () => {
 
         <div className="lg:col-span-5 relative">
           <div className="relative mx-auto max-w-md transform transition hover:scale-[1.02]">
-            <div className="bg-gradient-to-tr from-white to-slate-50 rounded-2xl shadow-xl p-6 border border-slate-100">
+            <div className="bg-gradient-to-tr from-white to-slate-50 rounded-2xl shadow-2xl shadow-indigo-600 p-6 border border-slate-100">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs text-slate-400">

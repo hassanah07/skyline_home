@@ -61,7 +61,7 @@ const resourcesData = [
     href: "#",
   },
   {
-    id: 7,
+    id: 8,
     title: "Personal Loan Form",
     type: "Guide",
     desc: "Security and data privacy guidelines tailored for financial products.",
@@ -172,7 +172,7 @@ export default function Page() {
           {filtered.map((r, idx) => (
             <article
               key={r.id}
-              className="relative bg-white rounded-2xl p-6 shadow-md border border-slate-100 hover:shadow-lg transition transform hover:-translate-y-1 hover:scale-[1.01]"
+              className="relative bg-white rounded-2xl p-6 shadow-2xl border border-slate-100 hover:shadow-lg transition transform hover:-translate-y-1 hover:scale-[1.01]"
             >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
