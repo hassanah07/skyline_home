@@ -193,7 +193,7 @@ export default function Page() {
           <div className="space-y-6">
             <h2 className="text-2xl font-semibold">Contact Us</h2>
             <p className="text-slate-600">
-              Have questions or want a demo? Send us a message and we'll get
+              Have questions or want a demo? Send us a message and we will get
               back within 24 hours.
             </p>
 
