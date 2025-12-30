@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Cta = () => {
@@ -15,12 +16,18 @@ const Cta = () => {
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="px-5 py-3 rounded-md bg-white text-indigo-600 font-semibold hover:bg-gray-100 transition">
+            {/* <Link
+              href="/contactUs"
+              className="px-5 py-3 rounded-md bg-white text-indigo-600 font-semibold hover:bg-gray-100 transition"
+            >
               Request a demo
-            </button>
-            <button className="px-5 py-3 rounded-md border border-white/30 text-white hover:bg-white/10 transition">
+            </Link> */}
+            <Link
+              href="/contactUs"
+              className="px-5 py-3 rounded-md border border-white/30 text-white hover:bg-white/10 transition"
+            >
               Contact sales
-            </button>
+            </Link>
           </div>
         </div>
       </section>

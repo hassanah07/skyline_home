@@ -22,10 +22,9 @@ export default function Page() {
       {/* Hero */}
       <ImageCarousel
         images={[
-          "/image/image1.png",
-          "/image/image2.png",
-          "/image/image3.png",
-          "/image/image3.png",
+          "/image/admins/photo1.jpeg",
+          "/image/admins/photo2.jpeg",
+          "/image/admins/photo3.jpeg",
         ]}
       />
       <Hero />

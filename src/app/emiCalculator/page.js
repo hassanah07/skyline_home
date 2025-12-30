@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
+import Footer from "../components/HomePageBlob/Footer";
 
 export default function Page() {
   // Inputs
@@ -154,7 +155,7 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
+    <div className="min-h-screen bg-gray-50 dark:text-black p-4 sm:p-8">
       <div className="max-w-5xl mx-auto bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-5 sm:p-6 border-b flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <h1 className="text-xl font-semibold">
@@ -343,6 +344,7 @@ export default function Page() {
           <div className="mt-4 flex gap-2 print:hidden"></div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
